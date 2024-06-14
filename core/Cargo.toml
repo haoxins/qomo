@@ -1,6 +1,6 @@
 [package]
 name = "qomo"
-version = "0.0.5"
+version = "0.0.6"
 edition = "2021"
 description = "A quantum computing toolkit for learning and visualization."
 repository = "https://github.com/haoxins/qomo"
@@ -9,5 +9,5 @@ keywords = ["quantum", "quantum-computing", "visualization", "simulation"]
 
 [dependencies]
 nalgebra = "0.32"
+num = "0.4"
 num-traits = "0.2"
-plotters = "0.3"
