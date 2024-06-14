@@ -1,6 +1,6 @@
 [package]
-name = "qomo"
-version = "0.0.0"
+name = "_"
+version = "0.0.2"
 edition = "2021"
 repository = "https://github.com/haoxins/qomo"
 
@@ -10,3 +10,4 @@ crate-type = ["cdylib"]
 
 [dependencies]
 pyo3 = "0.21"
+qomo = { path = "../core" }
