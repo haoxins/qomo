@@ -10,4 +10,5 @@ keywords = ["quantum", "quantum-computing", "visualization", "simulation"]
 [dependencies]
 nalgebra = "0.32"
 num = "0.4"
+num-complex = "0.4"
 num-traits = "0.2"
