@@ -10,7 +10,6 @@ impl Matrix {
     }
 }
 
-
 #[cfg(test)]
 mod tests {
     use super::*;
