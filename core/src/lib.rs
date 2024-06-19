@@ -20,12 +20,17 @@ pub struct Ket<T, const R: usize> {
 
 macro_rules! ket_impl(
     ($($R: expr, [$($num: ident),*] $(;)*)*) => {$(
-        impl<T> Ket<T, $R> {
+        impl<T> Ket<T, $R>
+        where T: Scalar + Num + NumAssignOps + MulAdd {
             // #[inline]
             pub const fn new($($num: T),*) -> Self {
                 Self {
                     v: Matrix::<T, Const<$R>, Const<1>, ArrayStorage<T, $R, 1>>::new($($num),*)
                 }
+            }
+
+            pub fn to_proj_op (&self) -> Matrix<T, Const<$R>, Const<$R>, ArrayStorage<T, $R, $R>> {
+                self.v.kronecker(&self.v.transpose())
             }
         }
 
@@ -35,7 +40,8 @@ macro_rules! ket_impl(
             }
         }
 
-        impl<T: Scalar + Num + NumAssignOps + MulAdd> Mul<Bra<T, $R>> for Ket<T, $R> {
+        impl<T> Mul<Bra<T, $R>> for Ket<T, $R>
+        where T: Scalar + Num + NumAssignOps + MulAdd {
             type Output = Matrix<T, Const<$R>, Const<$R>, ArrayStorage<T, $R, $R>>;
 
             fn mul(self, rhs: Bra<T, $R>) -> Self::Output {
@@ -43,8 +49,9 @@ macro_rules! ket_impl(
             }
         }
 
-        impl<T: Scalar + Num + NumAssignOps + MulAdd> Mul<Ket<T, $R>>
-            for Matrix<T, Const<$R>, Const<$R>, ArrayStorage<T, $R, $R>> {
+        impl<T> Mul<Ket<T, $R>>
+            for Matrix<T, Const<$R>, Const<$R>, ArrayStorage<T, $R, $R>>
+            where T: Scalar + Num + NumAssignOps + MulAdd {
             type Output = Ket<T, $R>;
 
             fn mul(self, rhs: Ket<T, $R>) -> Self::Output {
@@ -53,7 +60,8 @@ macro_rules! ket_impl(
         }
 
         // // https://stackoverflow.com/questions/63119000/why-am-i-required-to-cover-t-in-impl-foreigntraitlocaltype-for-t-e0210
-        impl<T: Scalar + Num + NumAssignOps + MulAdd> Mul<Ket<T, $R>> for (T,) {
+        impl<T> Mul<Ket<T, $R>> for (T,)
+        where T: Scalar + Num + NumAssignOps + MulAdd {
             type Output = Ket<T, $R>;
 
             fn mul(self, rhs: Ket<T, $R>) -> Self::Output {
@@ -61,7 +69,8 @@ macro_rules! ket_impl(
             }
         }
 
-        impl<T: Scalar + Num + NumAssignOps + MulAdd> Mul<T> for Ket<T, $R> {
+        impl<T> Mul<T> for Ket<T, $R>
+        where T: Scalar + Num + NumAssignOps + MulAdd {
             type Output = Ket<T, $R>;
 
             fn mul(self, rhs: T) -> Self::Output {
@@ -98,7 +107,8 @@ macro_rules! bra_impl(
             }
         }
 
-        impl<T: Scalar + Num + NumAssignOps + MulAdd> Mul<Ket<T, $R>> for Bra<T, $R> {
+        impl<T> Mul<Ket<T, $R>> for Bra<T, $R>
+        where T: Scalar + Num + NumAssignOps + MulAdd {
             type Output = T;
 
             fn mul(self, rhs: Ket<T, $R>) -> Self::Output {
@@ -154,5 +164,11 @@ mod tests {
         let k = Ket4::new(1.0, 2.0, 3.0, 4.0);
         let b = Bra4::new(4.0, 3.0, 2.0, 1.0);
         assert_eq!(b * k, 20.0);
+
+        let k = Ket2::new(1.0, 0.0);
+        assert_eq!(
+            k.to_proj_op(),
+            SquareMatrix::<f64, Const<2>, ArrayStorage<f64, 2, 2>>::new(1.0, 0.0, 0.0, 0.0)
+        );
     }
 }
