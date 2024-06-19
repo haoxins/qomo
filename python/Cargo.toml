@@ -10,4 +10,4 @@ crate-type = ["cdylib"]
 
 [dependencies]
 pyo3 = "0.21"
-qomo = "0.0.6"
+qomo = "0.0.7"
