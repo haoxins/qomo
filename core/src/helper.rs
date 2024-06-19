@@ -2,11 +2,11 @@ use nalgebra::base::Matrix;
 
 impl Matrix {
     pub fn is_hermitian(&self) -> bool {
-        self.is_square() && self.transpose() == self.conjugate()
+        self.is_square() && self.transpose().conjugate() == self
     }
 
     pub fn is_unitary(&self) -> bool {
-        self.is_square() && self.transpose() * self == Matrix::identity(self.nrows())
+        self.is_square() && self.transpose().conjugate() * self == Matrix::identity(self.nrows())
     }
 }
 
