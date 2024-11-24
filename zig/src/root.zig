@@ -1,10 +1,8 @@
 const std = @import("std");
-const testing = std.testing;
+const expect = std.testing.expect;
 
-export fn add(a: i32, b: i32) i32 {
-    return a + b;
-}
+const lib = @import("lib.zig");
 
 test "basic add functionality" {
-    try testing.expect(add(3, 7) == 10);
+    try expect(lib.add(3, 7) == 10);
 }
