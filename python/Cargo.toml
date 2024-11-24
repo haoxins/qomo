@@ -9,5 +9,5 @@ name = "qomo"
 crate-type = ["cdylib"]
 
 [dependencies]
-pyo3 = "0.21"
+pyo3 = "0.23"
 qomo = "0.0.7"
